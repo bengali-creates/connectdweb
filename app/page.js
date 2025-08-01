@@ -27,7 +27,7 @@ export default function Home() {
 
             <p className="tracking-tighter text-amber-200">Whether you're a creator, freelancer, founder, or just getting started — ConnectedWeb is the new way to unify your digital world.</p>
           <div className="mt-15">
-            <input type="text" placeholder="Get your connected web" className="" />
+            <input type="text" placeholder="Get your connected web" className="bg-white text-green-800 placeholder:text-green-800 px-6 p-2 rounded-3xl" />
           </div>
           </div>
           
