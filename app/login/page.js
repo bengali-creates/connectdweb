@@ -1,4 +1,5 @@
 "use client"
+
 import React from 'react'
 import { useSession, signIn, signOut } from "next-auth/react"
 import {useRouter} from 'next/navigation'
@@ -8,10 +9,10 @@ const Login = () => {
     const router = useRouter()
     if (session) {
         // If user is already logged in, redirect to dashboard
-        router.push('/dashboard')
+        router.push(`/${session.user.name}`)
     }
   return (
-      <div className='text-white py-14 container mx-auto'>
+      <div className='font-bold py-14 container mt-20 '>
       <h1 className='text-center p-3.5 font-bold text-3xl'>Login to Get Started</h1>
 
       <div className="flex flex-col gap-2 min-h-screen items-center  p-10">
