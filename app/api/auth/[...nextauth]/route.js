@@ -1,6 +1,6 @@
 import NextAuth from "next-auth"
 import GithubProvider from "next-auth/providers/github"
-import connectDb from "@/utils/connectDb"
+import connectDb from "@/db/connetdb"
 import User from "@/models/User"
 
 const handler = NextAuth({
@@ -26,7 +26,8 @@ const handler = NextAuth({
             username: profile.login,
             email: user.email,
             profilepic: user.image,
-
+            oguseremail: user.email,
+            ogusername: profile.login,
           });
           await newUser.save();
 
