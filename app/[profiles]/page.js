@@ -18,6 +18,16 @@ const Profiles = () => {
     console.log('Link changed:', links);
   }
     
+  const handleSubmit = async (e) => {
+  
+  const response = await fetch('/api/links', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ links }),
+  });
+  const data = await response.json();
+  console.log('Response:', data);
+};
   const handlechange2= (index,name,value) => {
     // const { name, value } = e.target;
     setLinks((prevLinks) =>
@@ -48,7 +58,7 @@ const Profiles = () => {
           <div>{link.linktext}</div>
 </div>
       })}
-       <button onClick={()=>addLink()} className='p-5 py-2 mx-2 bg-slate-900 text-white font-bold rounded-3xl'>+ Add Link</button>
+       <button onClick={handleSubmit} className='p-5 py-2 mx-2 bg-slate-900 text-white font-bold rounded-3xl'>+ Add Link</button>
           
     </div>
     </main>

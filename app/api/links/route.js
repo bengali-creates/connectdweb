@@ -1,16 +1,22 @@
 import connectDb from "@/db/connetdb";
-export async function POST(request) {
+import Userlink from "@/models/Userlink";
+import { NextResponse } from "next/server";
+
+export async function POST(req) {
     // const body=await request.json();
     // console.log(body);
     await connectDb();
     try {
-      const { links } = req.body;
-      const newDoc = new LinksArray({ links });
-      await newDoc.save();
-      res.status(201).json({ success: true, data: newDoc });
-    } catch (error) {
-      res.status(500).json({ success: false, error: error.message });
-    }
+      const { links } = await req.json();
+      const newDoc = await Userlink.create({ links });
+      // await newDoc.save();
+      return NextResponse.json({ success: true, data: newDoc }, { status: 201 });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
+  }
     console.log('Request received:', body);
   return Response.json({ message: 'Hello World' })
 }
