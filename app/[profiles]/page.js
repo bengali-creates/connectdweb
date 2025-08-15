@@ -1,12 +1,32 @@
 "use client"
 import React from 'react'
 import Navadmin from '@/components/Navadmin'
-import { useState } from 'react'
-
+import { useState,useEffect } from 'react'
+import { useSession, signIn, signOut } from "next-auth/react"
+import { set } from 'mongoose'
 
 const Profiles = () => {
+  const { data: session, update } = useSession()
   const [links, setLinks] = useState([{link:'', linktext:''}]);
+  const [currentUser, setCurrentUser] = useState( "");
+  useEffect(() => {
+    if (session) {
+      setCurrentUser(session.user.name);
+    }
   
+    
+  }, [session]);
+  
+  if (session) {
+    let user=session.user.name;
+    // setCurrentUser(user);
+    console.log('User:', user);
+    
+  }
+  console.log('currentUser:', currentUser);
+  
+  // 
+
   const handlechange = (e) => {
     const { name, value } = e.target;
     setLinks((prevLinks) =>
@@ -23,8 +43,9 @@ const Profiles = () => {
   const response = await fetch('/api/links', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ links }),
+    body: JSON.stringify({ user:currentUser , links }),
   });
+  setLinks([{link:'', linktext:''}]); 
   const data = await response.json();
   console.log('Response:', data);
 };
@@ -51,7 +72,7 @@ const Profiles = () => {
       <h1>ENTER THE URL</h1>
       <input type="text" onChange={handlechange} value={links.link} name='link' id='link' placeholder='enter the url'/>
       <h1>ENTER THE NAME</h1>
-      <input type="text" onChange={handlechange} value={links.linktext} name='linktext' id='linktext' placeholder='enter the url name'/>
+      <input type="text" onChange={handlechange}  value={links.linktext}  name='linktext' id='linktext' placeholder='enter the url name'/>
       {links && links.map((link,index) =>{
         return <div key={index}>
           <div>{link.link}</div>
