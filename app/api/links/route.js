@@ -32,6 +32,33 @@ export async function POST(req) {
       { status: 500 }
     );
   }
-    console.log('Request received:', body);
-  return Response.json({ message: 'Hello World' })
+}
+
+export async function GET(req) {
+  
+  try{
+    await connectDb();
+    const { searchParams } = new URL(req.url);
+    const user = searchParams.get('user');
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: "User parameter is required" },
+        { status: 400 }
+      );
+    }
+    const userLinks = await Userlink.findOne({ user });
+    if (!userLinks) {
+      return NextResponse.json(
+        { success: false, error: "User not found" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(
+      { success: true, data: userLinks },
+      { status: 200 }
+    );
+  }
+  catch(error){
+
+  }
 }
