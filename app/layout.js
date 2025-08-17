@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Connected Web",
   description: "Generated to solve your tangible problems ",
+  // icons: {
+  //   icon: "public/ChatGPT Image Aug 17, 2025, 09_14_43 PM.png", // or "/connectedweb-logo.png"
+  // },
 };
 
 export default function RootLayout({ children }) {

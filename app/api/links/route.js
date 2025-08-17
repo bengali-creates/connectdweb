@@ -62,3 +62,34 @@ export async function GET(req) {
 
   }
 }
+
+export async function PUT(req) {
+  try {
+    await connectDb();
+    const { user, links } = await req.json();
+    if (!user || !links || !Array.isArray(links)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid input data" },
+        { status: 400 }
+      );
+    }
+    const userLinks = await Userlink.findOne({  user });
+    if (!userLinks) {
+      return NextResponse.json(
+        { success: false, error: "User not found" },
+        { status: 404 }
+      );
+    } 
+    userLinks.links = links;
+    await userLinks.save();
+    return NextResponse.json(
+      { success: true, data: userLinks },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
+  }
+}
