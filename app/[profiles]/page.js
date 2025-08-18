@@ -45,11 +45,23 @@ const Profiles = () => {
 // handle Edit
   const handleEdit = (id) => {
     setShowEdit(id);
-    console.log('displayLinks[3].id', displayLinks[3].id)
-    // Logic to handle edit functionality
-    console.log('Editing link at index:', showEdit);
+  
   };
 
+  const handleditSubmit = async (id) => {
+    const editedLink = displayLinks.find((l) => l._id === id);
+    console.log('editedLink', editedLink)
+    const response=await fetch(`/api/links/${id}`, {
+      method:"PATCH",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user:currentUser , updatedLink: editedLink }),
+    })
+    const data = await response.json();
+    console.log('Edited link:', data);
+    // Reset the showEdit state to stop editing
+    setShowEdit("");
+    setGetChanger(!getChanger);
+  }
 // Function to handle form submission
   const handleSubmit = async (e) => {
   
@@ -61,8 +73,7 @@ const Profiles = () => {
   setLinks([{link:'', linktext:''}]); 
   const data = await response.json();
   setGetChanger(!getChanger);
-  // setDisplayLinks(data.data.links);
-  // console.log('displayLinks:', displayLinks);
+
   
   console.log('Response:', data);
 };
@@ -76,21 +87,18 @@ const Profiles = () => {
     setDisplayLinks(data.data.links);
   
  }
-  const handlechange2= (index,name,value) => {
+  const handlechange2= (id,name,value) => {
     // const { name, value } = e.target;
-    setLinks((prevLinks) =>
-       prevLinks.map((link, i) =>
-        index === i ? { ...link, [name]: value } : link
+    setDisplayLinks((prevLinks) =>
+       prevLinks.map((link, ) =>
+        id === link._id ? { ...link, [name]: value } : link
       )
       
     );
-    console.log('Link changed:', links);
+    console.log('editedLink changed:', displayLinks);
   
     
   }  
-   const addLink= () => { 
-    setLinks(links.concat([{link: "", linktext: ""}]))
-    }
   return (
     <main>
       <Navadmin />
@@ -108,9 +116,12 @@ const Profiles = () => {
       <h1>ENTER THE NAME</h1>
       <input type="text" onChange={handlechange}  value={links[0].linktext}  name='linktext' id='linktext' placeholder='enter the url name'/>
       {displayLinks && displayLinks.map((link,index) =>{
-        return <section className='bg-cyan-100 md:m-1.5 m-0.5 p-1.5 border-2 border-blue-700 border-dotted rounded-2xl' key={link.id}>
+        return <section className='bg-cyan-100 md:m-1.5 m-0.5 p-1.5 border-2 border-blue-700 border-dotted rounded-2xl' key={link._id}>
           <div id="link" className=' md:pl-7 md:gap-25 items-center'>
-          {showEdit?(<input type="text" onChange={handlechange} value={links.link} name='link' id='link' placeholder='enter the url'/>):( <div className='text-xl text-amber-950 font-bold'>{link.link}<Lotiecontroler src="/edit.lottie" label="" className="cursor-pointer  pl-2 " cl="w-6 h-6" onClick={() => {handleEdit(link._id)}}/></div>)}
+          {showEdit===link._id?(<div className='flex items-center gap-2'>
+            <input type="text" onChange={(e)=>{handlechange2(link._id,e.target.name,e.target.value)} } value={link.link} name='link' id='link' placeholder='enter the url'/>
+          <Lotiecontroler src="/addbtn.lottie" label="" className="cursor-pointer  pl-2 " cl="w-6 h-6" onClick={() => {handleditSubmit(link._id)}}/>
+          </div>):( <div className='text-xl text-amber-950 font-bold'>{link.link}<Lotiecontroler src="/edit.lottie" label="" className="cursor-pointer  pl-2 " cl="w-6 h-6" onClick={() => {handleEdit(link._id)}}/></div>)}
           
           <div>{link.linktext}<Lotiecontroler src="/edit.lottie" label="" className="cursor-pointer relative top-1 pl-2 " cl="w-6 h-6" onClick={() => {handleEdit(link.id)}}/></div>
           </div>
