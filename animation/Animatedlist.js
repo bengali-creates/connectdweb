@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'motion/react';
+import Link from 'next/link';
 
 const AnimatedItem = ({ children, delay = 0, index, onMouseEnter, onClick }) => {
   const ref = useRef(null);
@@ -21,11 +22,7 @@ const AnimatedItem = ({ children, delay = 0, index, onMouseEnter, onClick }) => 
 };
 
 const AnimatedList = ({
-  items = [
-    'Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5',
-    'Item 6', 'Item 7', 'Item 8', 'Item 9', 'Item 10',
-    'Item 11', 'Item 12', 'Item 13', 'Item 14', 'Item 15'
-  ],
+  items = [],
   onItemSelect,
   showGradients = true,
   enableArrowNavigation = true,
@@ -124,9 +121,15 @@ const AnimatedList = ({
               }
             }}
           >
-            <div className={`p-4 bg-[#111] rounded-lg ${selectedIndex === index ? 'bg-[#222]' : ''} ${itemClassName}`}>
-              <p className="text-white m-0">{item}</p>
+            <Link href={item.link}  className="">
+            <div className={`p-4 bg-[#f8dcdc] rounded-lg flex items-center justify-center${selectedIndex === index ? 'bg-[#222]' : ''} ${itemClassName}`}>
+              <p className="text-[#143a03] m-0 flex items-center justify-center">
+    
+      {item.linktext}
+    
+    </p>
             </div>
+            </Link>
           </AnimatedItem>
         ))}
       </div>
