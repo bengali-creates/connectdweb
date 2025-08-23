@@ -80,6 +80,7 @@ const [profilepic, setProfilepic] = useState("")
   showGradients={true}
   enableArrowNavigation={true}
   displayScrollbar={true}
+  className='w-full'
 />
   <button className='bg-white cursor-pointer' onClick={test}>hhhhhh</button>
 </div>
