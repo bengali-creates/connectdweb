@@ -51,7 +51,7 @@ const Navadmin = ({profiles}) => {
                 <li onClick={() => {
                   console.log('clicked');
                 }}>
-                  <Link href="/" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Your Page</Link>
+                  <Link href={`/${profiles}/connectedlinks`} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Your Page</Link>
                 </li>
                 <li>
                   <Link href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">About us</Link>

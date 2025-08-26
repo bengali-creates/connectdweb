@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
 import { set } from 'mongoose'
 import AnimatedList from '@/animation/Animatedlist'
+import FadeContent from '@/animation/Fade'
 
 const page = () => {
   const [getDataToggeler, setGetDataToggeler] = useState(false)
@@ -73,6 +74,7 @@ const [profilepic, setProfilepic] = useState("")
 </div>
 <div className='text-center text-2xl font-bold text-white mt-5'>{userData.name}</div>
 </div>
+ <FadeContent blur={true} duration={1000} delay={1000} easing="ease-out" initialOpacity={0}></FadeContent>
 <div>
   <AnimatedList
   items={links}
@@ -82,6 +84,7 @@ const [profilepic, setProfilepic] = useState("")
   displayScrollbar={true}
   className='w-full'
 />
+ <FadeContent/>
   <button className='bg-white cursor-pointer' onClick={test}>hhhhhh</button>
 </div>
     </section>

@@ -47,9 +47,11 @@ export async function PATCH(req,{ params }) {
   }
 }
 
-export async function DELETE(req,{params}){
+export async function DELETE(req,context){
   try{
+    
     await connectDb();
+    const {params}=context;
     const {id}= await params;
     const { user } = await req.json();
     if (!id || !user) {
@@ -72,7 +74,7 @@ export async function DELETE(req,{params}){
         { status: 404 }
       );
     }
-    delLink.remove();
+    await delLink.deleteOne();
     await userLink.save();
     return NextResponse.json(
       { success: true, data: userLink },
