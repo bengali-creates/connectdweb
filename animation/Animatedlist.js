@@ -122,8 +122,8 @@ const AnimatedList = ({
             }}
           >
             <Link href={item.link}  className="">
-            <div className={`p-4 bg-[#f8dcdc] rounded-lg flex items-center justify-center${selectedIndex === index ? 'bg-[#222]' : ''} ${itemClassName}`}>
-              <p className="text-[#143a03] m-0 flex items-center justify-center">
+            <div className={`p-4 bg-[#f8dcdc] rounded-lg flex items-center justify-center ${selectedIndex === index ? 'bg-[#222]' : ''} ${itemClassName}`}>
+              <p className="text-[#143a03] m-0 font-bold text-center">
     
       {item.linktext}
     
@@ -140,7 +140,7 @@ const AnimatedList = ({
             style={{ opacity: topGradientOpacity }}
           ></div>
           <div
-            className="absolute bottom-0 left-0 right-0 h-[100px] bg-gradient-to-t from-[#060010] to-transparent pointer-events-none transition-opacity duration-300 ease"
+            className="absolute bottom-0 left-0 right-0 h-[100px] bg-gradient-to-t from-[#684c9800] to-transparent pointer-events-none transition-shadow duration-300 ease"
             style={{ opacity: bottomGradientOpacity }}
           ></div>
         </>

@@ -6,7 +6,7 @@ import React from 'react'
 import { useState } from 'react'
 import Image from 'next/image'
 
-const Navadmin = () => {
+const Navadmin = ({profiles}) => {
     const [toggle, setToggle] = useState(false);
     const { data: session, update } = useSession()
 
@@ -19,7 +19,7 @@ const Navadmin = () => {
       </div>
       <ul className='flex space-x-4 text-xl'>
         <li className='md:block hidden'><Link href="/">Home</Link></li>
-        <li className='md:block hidden'><Link href="/about">Links</Link></li>
+        <li className='md:block hidden'><Link href={`/${profiles}/connectedlinks`}>Preview</Link></li>
         <li className='md:block hidden'><Link href="/contact">Contact</Link></li>
         <li className='md:block hidden'><Link href="/dashboard">Dashboard</Link></li>
 

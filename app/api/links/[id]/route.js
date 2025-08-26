@@ -1,5 +1,6 @@
 import connectDb from "@/db/connetdb";
 import Userlink from "@/models/Userlink";
+import next from "next";
 import { NextResponse } from "next/server";
 
 export async function PATCH(req,{ params }) {
@@ -39,6 +40,48 @@ export async function PATCH(req,{ params }) {
       { status: 200 }
     );
   } catch (error) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req,{params}){
+  try{
+    await connectDb();
+    const {id}= await params;
+    const { user } = await req.json();
+    if (!id || !user) {
+      return NextResponse.json(
+      { success: false, error: "parameters required" },
+      { status: 500 }
+    );
+    }
+    const userLink = await Userlink .findOne({ user });
+    if (!userLink) {
+      return NextResponse.json(
+        { success: false, error: "User not found" },
+        { status: 404 }
+      );
+    }
+    const delLink=userLink.links.id(id)
+    if(!delLink){
+      return NextResponse.json(
+        { success: false, error: "Link from id not found" },
+        { status: 404 }
+      );
+    }
+    delLink.remove();
+    await userLink.save();
+    return NextResponse.json(
+      { success: true, data: userLink },
+      { status: 200 }
+    );
+
+
+
+  }catch(error){
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 500 }

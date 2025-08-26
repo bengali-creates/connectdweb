@@ -15,7 +15,7 @@ const Profiles = () => {
   const [getChanger, setGetChanger ] = useState(true)
   const [currentUser, setCurrentUser] = useState( "");
   const [showEdit, setShowEdit] = useState("")
-
+  const [showEdit2, setShowEdit2] = useState("")
   useEffect(() => {
     if (session) {
       setCurrentUser(session.user.name);
@@ -47,6 +47,11 @@ const Profiles = () => {
     setShowEdit(id);
   
   };
+  const handleEdit2 = (id) => {
+    setShowEdit2(id);
+    console.log('showEdit2', showEdit2)
+  
+  };
 
   const handleditSubmit = async (id) => {
     const editedLink = displayLinks.find((l) => l._id === id);
@@ -60,6 +65,7 @@ const Profiles = () => {
     console.log('Edited link:', data);
     // Reset the showEdit state to stop editing
     setShowEdit("");
+    setShowEdit2("");
     setGetChanger(!getChanger);
   }
 // Function to handle form submission
@@ -77,6 +83,17 @@ const Profiles = () => {
   
   console.log('Response:', data);
 };
+
+// Delete link
+const handleDelete = async (id) => {
+  const  response= await fetch(`/api/links/${id}`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user: currentUser }),
+  });
+  const data = await response.json();
+  setGetChanger(!getChanger);
+}
 
 // geting links
  const getLinks = async () => {
@@ -101,7 +118,7 @@ const Profiles = () => {
   }  
   return (
     <main>
-      <Navadmin />
+      <Navadmin profiles={currentUser} />
     <div className='bg-cyan-50 pt-7 mt-8 text-black'>
       <button className='text-xl'><GradientText
   colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
@@ -118,12 +135,22 @@ const Profiles = () => {
       {displayLinks && displayLinks.map((link,index) =>{
         return <section className='bg-cyan-100 md:m-1.5 m-0.5 p-1.5 border-2 border-blue-700 border-dotted rounded-2xl' key={link._id}>
           <div id="link" className=' md:pl-7 md:gap-25 items-center'>
-          {showEdit===link._id?(<div className='flex items-center gap-2'>
-            <input type="text" onChange={(e)=>{handlechange2(link._id,e.target.name,e.target.value)} } value={link.link} name='link' id='link' placeholder='enter the url'/>
+          {showEdit===link._id?(
+            <div className='flex items-center gap-2'>
+            <input type="text" onChange={(e)=>{handlechange2(link._id,e.target.name,e.target.value)} } value={link.linktext} name='linktext' id='linktext' placeholder='enter the url'/>
           <Lotiecontroler src="/addbtn.lottie" label="" className="cursor-pointer  pl-2 " cl="w-6 h-6" onClick={() => {handleditSubmit(link._id)}}/>
-          </div>):( <div className='text-xl text-amber-950 font-bold'>{link.link}<Lotiecontroler src="/edit.lottie" label="" className="cursor-pointer  pl-2 " cl="w-6 h-6" onClick={() => {handleEdit(link._id)}}/></div>)}
+          </div>):( <div className='text-xl text-amber-950 font-bold'>{link.linktext}<Lotiecontroler src="/edit.lottie" label="" className="cursor-pointer  pl-2 " cl="w-6 h-6" onClick={() => {handleEdit(link._id)}}/></div>)}
           
-          <div>{link.linktext}<Lotiecontroler src="/edit.lottie" label="" className="cursor-pointer relative top-1 pl-2 " cl="w-6 h-6" onClick={() => {handleEdit(link.id)}}/></div>
+          {showEdit2===link._id?(
+            <div className='flex items-center gap-2'>
+            <input type="text" onChange={(e)=>{handlechange2(link._id,e.target.name,e.target.value)} } value={link.link} name='link' id='link' placeholder='enter the url name'/>
+          <Lotiecontroler src="/addbtn.lottie" label="" className="cursor-pointer  pl-2 " cl="w-6 h-6" onClick={() => {handleditSubmit(link._id)}}/>
+          </div>):(
+          <div>{link.link}<Lotiecontroler src="/edit.lottie" label="" className="cursor-pointer relative top-1 pl-2 " cl="w-6 h-6" onClick={() => {handleEdit2(link._id)}}/></div>
+          )}
+          <div className='buttons '>
+              <Lotiecontroler src="/delete.lottie" label="" className="cursor-pointer relative top-1 pl-2 " cl="w-6 h-6" onClick={() => {handleDelete(link._id)}}/>
+          </div>
           </div>
 </section >
       })}
