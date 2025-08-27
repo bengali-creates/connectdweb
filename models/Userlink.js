@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const LinkSchema = new mongoose.Schema({
     link: {type: String,required: true},
-    linktext: {type: String,required: true}
+    linktext: {type: String,required: true},
+    allowed: {type: Boolean, default: true}
 })
 
 const UserLinkschema = new mongoose.Schema({

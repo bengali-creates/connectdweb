@@ -10,7 +10,7 @@ import FadeContent from '@/animation/Fade'
 
 const Profiles = () => {
   const { data: session, update } = useSession()
-  const [links, setLinks] = useState([{ link: '', linktext: '' }]);
+  const [links, setLinks] = useState([{ link: '', linktext: '' ,allowed:true}]);
   const [displayLinks, setDisplayLinks] = useState([]);
   const [getChanger, setGetChanger] = useState(true)
   const [currentUser, setCurrentUser] = useState("");
@@ -55,6 +55,7 @@ const Profiles = () => {
 
   };
 
+// handle editted submit
   const handleditSubmit = async (id) => {
     const editedLink = displayLinks.find((l) => l._id === id);
     console.log('editedLink', editedLink)
@@ -70,6 +71,7 @@ const Profiles = () => {
     setShowEdit2("");
     setGetChanger(!getChanger);
   }
+
   // Function to handle form submission
   const handleSubmit = async (e) => {
 
@@ -117,18 +119,34 @@ const Profiles = () => {
     );
     console.log('editedLink changed:', displayLinks);
 
+      const handleToggleAllowed = async (id) => {
+        const toggledLink = displayLinks.find((l) => l._id === id);
+        if (!toggledLink) return; // If link not found, exit the function
+        const updatedAllowed = !toggledLink.allowed; // Toggle the allowed value
+        const response = await fetch(`/api/links/${id}`, {
+          method: "PATCH",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user: currentUser, updatedLink: { ...toggledLink, allowed: updatedAllowed } }),
+        });
+        const data = await response.json();
+        console.log('Toggled link:', data);
+        setGetChanger(!getChanger); 
+      }
 
   }
   return (
-    <main>
+    <main className='bg-gradient-to-b from-gray-100 to-blue-100  '>
       <Navadmin profiles={currentUser} />
-      <div className='bg-cyan-50 pt-7 mt-8 text-black '>
+      <div className='bg-gradient-to-b from-gray-100 to-blue-100 pt-7 mt-8 text-black md:w-[60%] w-[80%] min-h-screen rounded-3xl fixed top-10 md:left-[11%] left-[10%] px-3 pb-10 '>
         <div className='flex justify-center '>
-          <button className='text-xl font-bold max-w-fit p-2 ' onClick={() => { setShowAdd(!showAdd) }} onBlur={() => {
-              setTimeout(() => {
-                setToggle(false)
+          <button className='text-xl font-bold max-w-fit p-2 ' onClick={() => { setShowAdd(!showAdd) }} 
+          // onBlur={() => {
+          //     setTimeout(() => {
+          //       setShowAdd(false)
 
-              }, 200);}}><GradientText
+          //     }, 200);}}
+              >
+                <GradientText
           colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
           animationSpeed={3}
           showBorder={false}
@@ -138,20 +156,20 @@ const Profiles = () => {
         </GradientText>
         </button>
         </div>
-        <FadeContent blur={true} duration={1000} delay={1000} easing="ease-out" initialOpacity={0}>
-          <div className={`${showAdd ? "" : "hidden"} fixed inset-0 top-30 flex justify-center items-center  `} id='addlinks_modal'>
+        
+          <div className={`${showAdd ? "" : "hidden"} fixed right-[47%] top-40 flex justify-center items-center z-1  `} id='addlinks_modal'>
             <div className=' bg-green-600 px-3 py-5 rounded-3xl flex flex-col justify-center border-4 border-dotted border-blue-900'>
               <h1>ENTER THE URL</h1>
-              <input type="text" onChange={handlechange} value={links[0].link} name='link' id='link' placeholder='enter the url' />
+              <input type="text" onChange={handlechange} value={links[0].link} name='link' id='link' placeholder='enter the url' className='w-2xs' />
               <h1>ENTER THE NAME</h1>
-              <input type="text" onChange={handlechange} value={links[0].linktext} name='linktext' id='linktext' placeholder='enter the url name' />
+              <input type="text" onChange={handlechange} value={links[0].linktext} name='linktext' id='linktext' placeholder='enter the url name'  className='w-2xs'/>
               <button onClick={handleSubmit} className='p-5 py-2 mx-2 my-3 bg-slate-900 text-white font-bold rounded-3xl cursor-pointer'><span >+ Add Link</span></button>
             </div>
           </div>
-        </FadeContent>
+        
         {displayLinks && displayLinks.map((link, index) => {
-          return <section className='bg-cyan-100 md:m-1.5 m-0.5 p-1.5 border-2 border-blue-700 border-dotted rounded-2xl' key={link._id}>
-            <div id="link" className=' md:pl-7 md:gap-25 items-center flex flex-col md:flex-row justify-between '>
+          return <section className='bg-cyan-100 md:m-1.5 w-[90%] mt-2 md:mt-4 m-0.5 p-1.5 border-2 border-blue-700 border-dotted rounded-2xl shadow-md drop-shadow-xl hover:shadow-[#01065a] ' key={link._id}>
+            <div id="link" className=' md:pl-7 md:gap-25 items-center flex flex-col md:flex-row justify-between  '>
               <div>{showEdit === link._id ? (
                 <div className='flex items-center gap-2'>
                   <input type="text" onChange={(e) => { handlechange2(link._id, e.target.name, e.target.value) }} value={link.linktext} name='linktext' id='linktext' placeholder='enter the url' />
@@ -167,11 +185,10 @@ const Profiles = () => {
               )}
               </div>
               <div className='buttons '>
-                <label class="inline-flex items-center me-5 cursor-pointer">
-  <input type="checkbox" value="" class="sr-only peer" checked/>
-  <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600 dark:peer-checked:bg-teal-600"></div>
-  <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Teal</span>
-</label>
+                <label className="inline-flex items-center me-5 cursor-pointer">
+  <input type="checkbox" value="allowed" className="sr-only peer" checked={link.allowed} onChange={()=>{handleToggleAllowed}} />
+  <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600 dark:peer-checked:bg-teal-600"></div>
+  </label>
 
                 <Lotiecontroler src="/delete.lottie" label="" className="cursor-pointer relative top-1 pl-2 " cl="w-10 h-10" onClick={() => { handleDelete(link._id) }} />
               </div>

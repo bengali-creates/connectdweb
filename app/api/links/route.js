@@ -3,11 +3,11 @@ import Userlink from "@/models/Userlink";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-    // const body=await request.json();
-    // console.log(body);
+    
     await connectDb();
     try {
       const { user,links } = await req.json();
+      console.log('links', links)
       // if (!user || !links || !Array.isArray(links)) {
       //   return NextResponse.json(
       //     { success: false, error: "Invalid input data",data: "nil" },
