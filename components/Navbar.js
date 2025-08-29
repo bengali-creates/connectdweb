@@ -16,7 +16,7 @@ const Navbar = () => {
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
                     <div className='flex gap-8 items-center'>
                     <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-                        <Image src="/file.svg" height={20} width={20} alt="Flowbite Logo" />
+                        <Image src="/ChatGPT Image Aug 17, 2025, 09_14_43 PM.png" height={40} width={40} alt="Flowbite Logo" />
                         <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-black">ConnectedWeb</span>
                     </Link>
                     <button data-collapse-toggle="mega-menu-full" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="mega-menu-full" aria-expanded="false">

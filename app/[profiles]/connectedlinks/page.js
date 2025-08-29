@@ -66,7 +66,7 @@ const [profilepic, setProfilepic] = useState("")
   />
 
  <div>
-      <h1 className='text-3xl text-center text-white'>Welcome to the Silk Animation Page</h1>
+      <h1 className='text-3xl text-center text-white'></h1>
 </div>
 <div>
 <div className='profilepic flex justify-center items-center mt-10'>
@@ -85,7 +85,7 @@ const [profilepic, setProfilepic] = useState("")
   className='w-full'
 />
  <FadeContent/>
-  <button className='bg-white cursor-pointer' onClick={test}>hhhhhh</button>
+  
 </div>
     </section>
     </>

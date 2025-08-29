@@ -121,7 +121,7 @@ const AnimatedList = ({
               }
             }}
           >
-            <Link href={item.link}  className="">
+            {item.allowed&&<Link href={item.link}  className="" target="_blank" rel="noopener noreferrer">
             <div className={`p-4 bg-[#f8dcdc] rounded-lg flex items-center justify-center ${selectedIndex === index ? 'bg-[#222]' : ''} ${itemClassName}`}>
               <p className="text-[#143a03] m-0 font-bold text-center">
     
@@ -129,7 +129,8 @@ const AnimatedList = ({
     
     </p>
             </div>
-            </Link>
+            </Link>}
+            
           </AnimatedItem>
         ))}
       </div>

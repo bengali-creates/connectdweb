@@ -62,7 +62,7 @@ const Profiles = () => {
     const response = await fetch(`/api/links/${id}`, {
       method: "PATCH",
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user: currentUser, updatedLink: editedLink }),
+      body: JSON.stringify({ type:"edit",user: currentUser, updatedLink: editedLink }),
     })
     const data = await response.json();
     console.log('Edited link:', data);
@@ -70,6 +70,21 @@ const Profiles = () => {
     setShowEdit("");
     setShowEdit2("");
     setGetChanger(!getChanger);
+  }
+
+  // handle toggle allowed
+  const handleToggleAllowed = async (id) => {
+    const editedLink = displayLinks.find((l) => l._id === id);
+    console.log('editedLink', editedLink)
+    const response = await fetch(`/api/links/${id}`, {
+      method: "PATCH",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type:"toggle",user: currentUser, updatedLink: editedLink }),
+    })
+    const data = await response.json();
+    console.log('Edited link:', data);
+    setGetChanger(!getChanger);
+    return
   }
 
   // Function to handle form submission
@@ -80,6 +95,7 @@ const Profiles = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user: currentUser, links }),
     });
+    console.log('links', links)
     setLinks([{ link: '', linktext: '' }]);
     const data = await response.json();
     setGetChanger(!getChanger);
@@ -119,19 +135,7 @@ const Profiles = () => {
     );
     console.log('editedLink changed:', displayLinks);
 
-      const handleToggleAllowed = async (id) => {
-        const toggledLink = displayLinks.find((l) => l._id === id);
-        if (!toggledLink) return; // If link not found, exit the function
-        const updatedAllowed = !toggledLink.allowed; // Toggle the allowed value
-        const response = await fetch(`/api/links/${id}`, {
-          method: "PATCH",
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user: currentUser, updatedLink: { ...toggledLink, allowed: updatedAllowed } }),
-        });
-        const data = await response.json();
-        console.log('Toggled link:', data);
-        setGetChanger(!getChanger); 
-      }
+      
 
   }
   return (
@@ -181,12 +185,15 @@ const Profiles = () => {
                   <input type="text" onChange={(e) => { handlechange2(link._id, e.target.name, e.target.value) }} value={link.link} name='link' id='link' placeholder='enter the url name' />
                   <Lotiecontroler src="/addbtn.lottie" label="" className="cursor-pointer  pl-2 " cl="w-6 h-6" onClick={() => { handleditSubmit(link._id) }} />
                 </div>) : (
-                <div>{link.link}<Lotiecontroler src="/edit.lottie" label="" className="cursor-pointer relative top-1 pl-2 " cl="w-6 h-6" onClick={() => { handleEdit2(link._id) }} /></div>
-              )}
+                  <div className='flex place-items-start'>
+                <div className='w-[15vw] overflow-hidden h-6'>{link.link}</div>
+                <Lotiecontroler src="/edit.lottie" label="" className="cursor-pointer relative top-1 pl-2 " cl="w-6 h-6" onClick={() => { handleEdit2(link._id) }} />
+              </div>
+            )}
               </div>
               <div className='buttons '>
                 <label className="inline-flex items-center me-5 cursor-pointer">
-  <input type="checkbox" value="allowed" className="sr-only peer" checked={link.allowed} onChange={()=>{handleToggleAllowed}} />
+  <input type="checkbox" value="allowed" className="sr-only peer" checked={link.allowed} onChange={()=>{handleToggleAllowed(link._id)}} />
   <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-teal-600 dark:peer-checked:bg-teal-600"></div>
   </label>
 

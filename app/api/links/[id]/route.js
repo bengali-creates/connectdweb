@@ -7,7 +7,7 @@ export async function PATCH(req,{ params }) {
   try {
     await connectDb();
     const {id}=params;
-    const { user, updatedLink } = await req.json();
+    const { type,user, updatedLink } = await req.json();
     
     if (!id || !user || !updatedLink) {
       return NextResponse.json(
@@ -31,9 +31,16 @@ export async function PATCH(req,{ params }) {
       );
     }
 
-    link.link=updatedLink.link||link.link;
+    if (type==="edit"){
+      link.link=updatedLink.link||link.link;
     link.linktext=updatedLink.linktext||link.linktext
      await userLink.save();
+    }
+    
+    if(type==="toggle"){
+      link.allowed=!link.allowed;
+      await userLink.save();
+    }
 
     return NextResponse.json(
       { success: true, data: userLink },
