@@ -1,0 +1,100 @@
+"use client"
+import React, { useState,useEffect,useRef } from 'react'
+import Silk from '@/animation/Silkbackground'
+import Image from 'next/image'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import { set } from 'mongoose'
+import AnimatedList from '@/animation/Animatedlist'
+import FadeContent from '@/animation/Fade'
+import FullScreenSilk from '@/animation/Silkbackground'
+
+const Preview = ({heightHg,widthHg,changer}) => {
+  const [getDataToggeler, setGetDataToggeler] = useState(false)
+ const [userData, setUserData] = useState([])
+ const profileImage = useRef(null)
+const [links, setLinks] = useState([])
+const [profilepic, setProfilepic] = useState("")
+
+  const path = usePathname();
+  const firstSegment = path.split('/')[1];
+  useEffect(() => {
+    if(firstSegment){
+    getUserData()
+    
+    }
+  
+  }, [firstSegment,changer])
+  
+
+  // const router = useRouter();
+  
+  console.log('First segment:', firstSegment); // This will log the first segment of the
+ const { data: session } = useSession()
+
+ const getUserData= async()=>{
+   const response= await fetch(`/api/user?ogusername=${firstSegment}`, {
+     method: "GET",
+     headers: { 'Content-Type': 'application/json' },
+
+   });
+   const data= await response.json();
+   
+   console.log('data', data)
+   setGetDataToggeler(true);
+   setUserData(data.data)
+   profileImage.current=data.data.profilepic;
+   setLinks(data.userlink.links);
+   
+   setProfilepic(data.data.profilepic);
+   
+ }
+ const test=()=>{
+   console.log('test function called',links);
+  }
+
+  return (
+    <>
+    <section className='relative w-full h-screen  '>
+    <FullScreenSilk
+  speed={5}
+  scale={1.5}
+  color="#000080"
+  noiseIntensity={1.5}
+  rotation={2.59}
+  className="silkCanvas "
+  heightH={heightHg}
+  widthH={widthHg}
+  />
+
+ <div>
+      <h1 className='text-3xl text-center text-white'></h1>
+</div>
+<div className="info absolute w-full top-10">
+<div>
+<div className='profilepic flex justify-center items-center mt-10'>
+  <Image src={profilepic||profileImage.current} alt="user" width={50} height={50} className="rounded-full" />
+</div>
+<div className='text-center text-2xl font-bold text-white mt-5'>{userData.name}</div>
+</div>
+ <FadeContent blur={true} duration={1000} delay={1000} easing="ease-out" initialOpacity={0}></FadeContent>
+<div>
+  <AnimatedList
+  items={links}
+  onItemSelect={(item, index) => console.log(item, index)}
+  showGradients={true}
+  enableArrowNavigation={true}
+  displayScrollbar={true}
+  className='w-full'
+/>
+ <FadeContent/>
+  
+</div>
+</div>
+    </section>
+    </>
+  )
+}
+
+export default Preview

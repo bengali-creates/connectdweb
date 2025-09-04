@@ -3,10 +3,11 @@ import Userlink from "@/models/Userlink";
 import next from "next";
 import { NextResponse } from "next/server";
 
-export async function PATCH(req,{ params }) {
+export async function PATCH(req,context) {
   try {
     await connectDb();
-    const {id}=params;
+    const {params}=context;
+    const {id}= await params;
     const { type,user, updatedLink } = await req.json();
     
     if (!id || !user || !updatedLink) {

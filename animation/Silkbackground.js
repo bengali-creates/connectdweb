@@ -109,7 +109,9 @@ export default function FullScreenSilk({
   color = "#7B7481",
   noiseIntensity = 1.5,
   rotation = 0,
-  heightMultiplier = 1, // tweak to stretch vertically relative to viewport
+  heightMultiplier = 1,
+  heightH="100vh",
+  widthH="100vw" // tweak to stretch vertically relative to viewport
 }) {
   const meshRef = useRef();
 
@@ -130,10 +132,10 @@ export default function FullScreenSilk({
       dpr={[1, 2]}
       frameloop="always"
       style={{
-        position: "fixed",
-        inset: 0,              // shorthand for top:0; right:0; bottom:0; left:0;
-        width: "100vw",
-        height: "100vh",
+        position: "relative",
+                     // shorthand for top:0; right:0; bottom:0; left:0;
+        width: widthH,
+        height: heightH,
         zIndex: -1,           // keep it behind normal page content
         pointerEvents: "none",// allow clicks to pass through
         touchAction: "none",  // avoid intercepting touch gestures
